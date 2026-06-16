@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Seminário | Antenas Refletoras - Slides Completos</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax para renderização de equações -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+    <style>
+        /* ===== ESTILOS GERAIS ===== */
+        :root {
+        --fundo: #12060f;
+        --fundo-2: #21091d;
+        --vinho: #6d173a;
+        --vinho-claro: #9d2853;
+        --roxo: #5a2a90;
+        --roxo-claro: #8c5bd6;
+        --dourado: #e4b86a;
+        --texto: #fff4df;
+        --suave: #d5bfd0;
+        --painel: rgba(43, 13, 39, 0.82);
+        --painel-forte: rgba(87, 19, 54, 0.86);
+        --linha: rgba(228, 184, 106, 0.28);
+        --sombra: rgba(0, 0, 0, 0.34);
+        --raio: 8px;
+        --fonte-titulo: Georgia, "Times New Roman", serif;
+        --fonte-corpo: "Segoe UI", Arial, sans-serif;
+        }
+
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+
+        body {
+        background: var(--fundo);
+        color: var(--texto);
+        font-family: var(--fonte-corpo);
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        }
+
+        .slides-container {
+        height: 100vh;
+        width: 100%;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+        }
+
+        .slide {
+        min-height: 100vh;
+        scroll-snap-align: start;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 2%; /* REDUZIDO para ganhar espaço lateral */
+        position: relative;
+        }
+
+        .slide-content {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        }
+
+        /* ===== AJUSTES ESPECÍFICOS PARA O SLIDE DE EQUAÇÕES ===== */
+        .slide-bg-alt .slide-content {
+            max-width: 95%; /* MAIOR largura máxima */
+        }
+
+        /* Grade dos cards - mais espaçada e com cards maiores */
+        .slide-bg-alt .slide-content > div[style*="grid"] {
+            gap: 2.5rem !important; /* MAIOR espaçamento entre cards */
+            align-items: stretch; /* Garante que todos os cards tenham a mesma altura */
+        }
+
+        .slide-bg-alt .slide-content > div[style*="grid"] > div {
+            padding: 2rem !important; /* MAIOR padding interno */
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Estica para preencher a altura da linha */
+            justify-content: flex-start; /* Conteúdo alinhado ao topo */
+        }
+
+        .slide-bg-alt .slide-content > div[style*="grid"] h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--dourado);
+        }
+
+        .slide-bg-alt .slide-content > div[style*="grid"] p,
+        .slide-bg-alt .slide-content > div[style*="grid"] li {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .slide-bg-alt .slide-content > div[style*="grid"] ul {
+            padding-left: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .slide-bg-alt .slide-content > div[style*="grid"] .image-caption {
+            font-size: 0.85rem;
+            margin-top: auto; /* Empurra a legenda para o final do card */
+            padding-top: 0.5rem;
+            border-top: 1px solid rgba(228,184,106,0.2);
+        }
+
+        .slide-bg-alt .slide-content > div[style*="grid"] .eq-display {
+            background: var(--fundo-2);
+            padding: 0.8rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 0.8rem 0;
+            flex-shrink: 0;
+        }
+
+        /* ===== FIM DOS AJUSTES ===== */
+
+        .nav-controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+        display: flex;
+        gap: 1rem;
+        }
+
+        .nav-btn {
+        background: var(--painel-forte);
+        color: var(--texto);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 1px solid var(--linha);
+        font-size: 1.2rem;
+        box-shadow: 0 4px 12px var(--sombra);
+        }
+
+        .nav-btn:hover {
+        background: var(--vinho-claro);
+        color: var(--texto);
+        border-color: var(--dourado);
+        transform: scale(1.1);
+        }
+
+        .slide-indicator {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: var(--painel);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        color: var(--dourado);
+        border: 1px solid var(--linha);
+        font-size: 0.8rem;
+        z-index: 100;
+        font-weight: 600;
+        }
+
+        .section-badge {
+        display: inline-block;
+        background: var(--painel-forte);
+        padding: 0.4rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        color: var(--dourado);
+        border: 1px solid var(--linha);
+        margin-bottom: 1.5rem;
+        letter-spacing: 1px;
+        font-weight: 600;
+        }
+
+        .cover {
+        text-align: center;
+        }
+
+        .cover h1 {
+        font-family: var(--fonte-titulo);
+        font-size: 3.8rem;
+        color: var(--texto);
+        margin-bottom: 1rem;
+        line-height: 1.2;
+        }
+
+        .cover h1 span {
+        color: var(--dourado);
+        }
+
+        .institution {
+        margin-top: 2rem;
+        color: var(--suave);
+        }
+        
+        .institution p {
+        margin-top: 0.4rem;
+        }
+
+        .team {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+        }
+
+        .team-member {
+        background: var(--fundo-2);
+        padding: 0.5rem 1.5rem;
+        border-radius: 40px;
+        border: 1px solid var(--linha);
+        color: var(--texto);
+        font-size: 0.9rem;
+        box-shadow: 0 4px 8px var(--sombra);
+        }
+
+        .team-member i {
+        color: var(--dourado);
+        margin-right: 0.5rem;
+        }
+
+        .timeline-detail {
+        display: flex;
+        flex-direction: row;
+        gap: 2.5rem;
+        align-items: center;
+        background: var(--painel);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 32px;
+        padding: 2.5rem;
+        border: 1px solid var(--linha);
+        box-shadow: 0 12px 30px var(--sombra);
+        max-height: 85vh;
+        overflow-y: auto;
+        }
+
+        .timeline-image {
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        flex-shrink: 0;
+        }
+
+        .timeline-image img {
+        width: 100%;
+        max-width: 300px;
+        height: 220px;
+        object-fit: cover;
+        border-radius: var(--raio);
+        border: 1px solid var(--linha);
+        background: var(--fundo-2);
+        padding: 0.5rem;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-image.expanded {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        }
+
+        .timeline-image.expanded img {
+        max-width: 100%;
+        height: auto;
+        max-height: 450px;
+        width: auto;
+        position: relative;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        border-color: var(--dourado);
+        margin: 0 auto;
+        display: block;
+        }
+
+        .expand-close-btn {
+        display: none;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: var(--vinho);
+        color: var(--texto);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.3s;
+        z-index: 20;
+        border: 1px solid var(--dourado);
+        font-size: 0.8rem;
+        }
+
+        .expand-close-btn:hover {
+        background: var(--vinho-claro);
+        transform: scale(1.1);
+        }
+
+        .timeline-image.expanded .expand-close-btn {
+        display: flex;
+        }
+
+        .timeline-image .image-caption {
+        font-size: 0.75rem;
+        color: var(--suave);
+        margin-top: 0.5rem;
+        transition: 0.3s;
+        }
+
+        .timeline-info {
+        width: 100%;
+        transition: 0.3s;
+        }
+
+        .timeline-year-large {
+        font-family: var(--fonte-titulo);
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: var(--dourado);
+        margin-bottom: 0.3rem;
+        }
+
+        .timeline-title-large {
+        font-family: var(--fonte-titulo);
+        font-size: 2rem;
+        color: var(--texto);
+        margin-bottom: 0.8rem;
+        }
+
+        .timeline-desc-large {
+        color: var(--suave);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        }
+
+        .timeline-details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+        margin-bottom: 1rem;
+        }
+
+        .how-it-works {
+        margin-top: 1.2rem;
+        padding: 1.2rem;
+        background: rgba(90, 42, 144, 0.25);
+        border-radius: var(--raio);
+        border-left: 4px solid var(--dourado);
+        }
+
+        .timeline-detail-item {
+        background: rgba(255, 255, 255, 0.04);
+        padding: 1rem;
+        border-radius: var(--raio);
+        border: 1px solid rgba(228, 184, 106, 0.1);
+        }
+
+        .timeline-detail-item i {
+        color: var(--dourado);
+        margin-right: 0.5rem;
+        }
+
+        .timeline-detail-item strong {
+        color: var(--dourado);
+        display: block;
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        }
+
+        .timeline-detail-item span {
+        color: var(--texto);
+        font-size: 0.88rem;
+        }
+
+        .slide-footer {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--suave);
+        opacity: 0.7;
+        }
+
+        .slide-bg-light { background: linear-gradient(180deg, var(--fundo), var(--fundo-2)); }
+        .slide-bg-alt { background: linear-gradient(180deg, var(--fundo-2), var(--fundo)); }
+
+        .why-evolve-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin: 2rem 0;
+        }
+
+        .why-card {
+        background: var(--painel);
+        border-radius: 24px;
+        padding: 1.8rem;
+        border: 1px solid var(--linha);
+        transition: 0.3s;
+        text-align: center;
+        box-shadow: 0 6px 15px var(--sombra);
+        }
+
+        .why-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--roxo-claro);
+        box-shadow: 0 12px 25px rgba(140, 91, 214, 0.2);
+        }
+
+        .why-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--vinho), var(--roxo));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.2rem auto;
+        border: 2px solid var(--dourado);
+        }
+
+        .why-icon i {
+        font-size: 2rem;
+        color: var(--dourado);
+        }
+
+        .why-card h3 {
+        font-family: var(--fonte-titulo);
+        font-size: 1.3rem;
+        color: var(--dourado);
+        margin-bottom: 0.6rem;
+        }
+
+        .why-card p {
+        color: var(--suave);
+        font-size: 0.88rem;
+        line-height: 1.5;
+        }
+
+        .evolution-timeline {
+        background: var(--painel);
+        border-radius: 28px;
+        padding: 1.8rem;
+        border: 1px solid var(--linha);
+        margin-top: 1rem;
+        box-shadow: 0 8px 20px var(--sombra);
+        }
+
+        .timeline-steps-horizontal {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.5rem;
+        min-width: 800px;
+        position: relative;
+        }
+
+        .timeline-steps-horizontal::before {
+        content: '';
+        position: absolute;
+        top: 35px;
+        left: 40px;
+        right: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, var(--dourado), var(--vinho-claro), var(--dourado));
+        border-radius: 3px;
+        z-index: 0;
+        }
+
+        .timeline-step-horizontal {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        background: var(--fundo-2);
+        border-radius: 20px;
+        padding: 1.2rem 0.6rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        min-width: 110px;
+        border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .timeline-step-horizontal:hover {
+        transform: translateY(-5px);
+        background: var(--painel-forte);
+        border-color: var(--dourado);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .step-marker {
+        width: 40px;
+        height: 40px;
+        background: var(--dourado);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.8rem auto;
+        border: 3px solid var(--fundo-2);
+        box-shadow: 0 2px 8px var(--sombra);
+        }
+
+        .step-marker i {
+        color: var(--vinho);
+        font-size: 1rem;
+        }
+
+        .step-year-horizontal {
+        font-weight: 700;
+        color: var(--dourado);
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+        }
+
+        .step-title-horizontal {
+        font-size: 0.85rem;
+        color: var(--texto);
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        }
+
+        .step-desc-horizontal {
+        font-size: 0.72rem;
+        color: var(--suave);
+        }
+
+        .lab-frame-container {
+        background: var(--painel);
+        border: 2px solid var(--dourado);
+        border-radius: 24px;
+        padding: 1rem;
+        box-shadow: 0 12px 35px var(--sombra);
+        width: 100%;
+        height: 75vh;
+        overflow: hidden;
+        }
+
+        .lab-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 14px;
+        }
+
+        @media (max-width: 992px) {
+        .why-evolve-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .evolution-timeline {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .timeline-steps-horizontal {
+            min-width: 850px;
+            padding-bottom: 10px;
+        }
+        }
+
+        @media (max-width: 768px) {
+        body {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            padding: 4rem 1.5rem 5rem 1.5rem;
+        }
+
+        .cover h1 { 
+            font-size: 2.5rem; 
+        }
+        
+        .timeline-title-large {
+            font-size: 1.6rem;
+        }
+
+        .why-evolve-grid { 
+            grid-template-columns: 1fr; 
+            gap: 1rem;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .timeline-detail { 
+            flex-direction: column; 
+            align-items: center;
+            text-align: center; 
+            padding: 1.5rem; 
+            gap: 1.5rem;
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .timeline-image {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .timeline-image img { 
+            max-width: 220px; 
+            height: 150px; 
+        }
+
+        .timeline-image.expanded img { 
+            max-height: 250px; 
+        }
+
+        .timeline-year-large { 
+            font-size: 2.2rem; 
+            text-align: center;
+        }
+
+        .timeline-title-large { 
+            font-size: 1.5rem; 
+            text-align: center;
+        }
+
+        .timeline-desc-large {
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-details-grid { 
+            grid-template-columns: 1fr; 
+            gap: 0.8rem;
+        }
+
+        .nav-controls {
+            bottom: 15px;
+            right: 15px;
+            gap: 0.5rem;
+        }
+
+        .nav-btn { 
+            width: 44px; 
+            height: 44px; 
+            font-size: 1rem;
+        }
+
+        .slide-indicator {
+            bottom: 15px;
+            left: 15px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+        }
+
+        .team-member { 
+            font-size: 0.8rem; 
+            padding: 0.4rem 1rem; 
+        }
+
+        .timeline-steps-horizontal { 
+            flex-direction: column; 
+            align-items: stretch; 
+            gap: 1rem; 
+            min-width: auto; 
+        }
+
+        .timeline-steps-horizontal::before { 
+            display: none; 
+        }
+
+        .timeline-step-horizontal { 
+            min-width: auto; 
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .step-marker { 
+            margin: 0; 
+            flex-shrink: 0;
+        }
+        .lab-frame-container {
+            height: 60vh;
+        }
+        }
+
+        @media (max-width: 480px) {
+        .slide {
+            padding: 3.5rem 1rem 4.5rem 1rem;
+        }
+        .cover h1 {
+            font-size: 2rem;
+        }
+        .timeline-stats {
+            gap: 0.8rem;
+        }
+        .stat-item {
+            padding: 0.8rem;
+            min-width: 45%;
+        }
+        .stat-number {
+            font-size: 1.6rem;
+        }
+        }
+
+        /* Modal de foco para equações - VERSÃO MELHORADA */
+        .eq-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.94);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .eq-modal-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            background: var(--painel-forte);
+            border-radius: 32px;
+            padding: 1.5rem;
+            border: 2px solid var(--dourado);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
+            cursor: default;
+            animation: modalFadeIn 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .eq-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: var(--vinho);
+            color: var(--dourado);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.1rem;
+            border: 1px solid var(--dourado);
+            z-index: 10;
+        }
+
+        .eq-modal-close:hover {
+            background: var(--vinho-claro);
+            transform: scale(1.1);
+        }
+
+        .eq-modal-two-columns {
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            margin-top: 0.5rem;
+            overflow-y: auto;
+            max-height: 85vh;
+            padding: 0.5rem;
+            align-items: stretch;
+        }
+
+        .eq-modal-left {
+            flex: 1.6;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .eq-modal-right {
+            flex: 1;
+            min-width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: space-between;
+        }
+
+        .eq-modal-equation {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            background: var(--fundo-2);
+            border-radius: 20px;
+            overflow-x: auto;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .eq-modal-legend {
+            font-size: 0.9rem;
+            color: var(--suave);
+            border-top: 1px solid var(--linha);
+            padding-top: 1rem;
+        }
+
+        .eq-modal-legend table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            table-layout: fixed;
+        }
+
+        .eq-modal-legend th:nth-child(1) { width: 15%; }
+        .eq-modal-legend th:nth-child(2) { width: 40%; }
+        .eq-modal-legend th:nth-child(3) { width: 20%; }
+        .eq-modal-legend th:nth-child(4) { width: 25%; }
+
+        .eq-modal-legend th, .eq-modal-legend td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(228,184,106,0.2);
+            word-wrap: break-word;
+        }
+
+        .eq-modal-legend th {
+            color: var(--dourado);
+            font-weight: 600;
+        }
+
+        .eq-modal-diagram, .eq-modal-graph {
+            background: var(--fundo-2);
+            border-radius: 16px;
+            padding: 1rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .eq-modal-diagram svg, .eq-modal-graph svg {
+            width: 100%;
+            max-width: 160px;
+            height: auto;
+            display: block;
+        }
+
+        .eq-modal-diagram .caption, .eq-modal-graph .caption {
+            font-size: 0.75rem;
+            color: var(--suave);
+            margin-top: 0.8rem;
+            font-weight: 600;
+        }
+
+        .eq-clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .eq-clickable:hover {
+            background: rgba(228, 184, 106, 0.15);
+            border-radius: 8px;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 900px) {
+            .eq-modal-two-columns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- VLIBRAS (acessibilidade) -->
+<div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+    </div>
+</div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
+
+<!-- MODAL DE FOCO PARA EQUAÇÕES (COM DIAGRAMA, GRÁFICO E TABELA) -->
+<div id="eqModal" class="eq-modal" onclick="closeEqModal(event)">
+    <div class="eq-modal-content" onclick="event.stopPropagation()">
+        <div class="eq-modal-close" onclick="closeEqModal()"><i class="fas fa-times"></i></div>
+        <div class="eq-modal-two-columns">
+            <!-- Coluna esquerda: equação e legenda/tabela -->
+            <div class="eq-modal-left">
+                <div id="modalEquation" class="eq-modal-equation"></div>
+                <div id="modalLegend" class="eq-modal-legend"></div>
+            </div>
+            <!-- Coluna direita: diagrama e gráfico -->
+            <div class="eq-modal-right">
+                <div id="modalDiagram" class="eq-modal-diagram"></div>
+                <div id="modalGraph" class="eq-modal-graph"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slides-container" id="slidesContainer">
+
+    <!-- TODOS OS SLIDES ORIGINAIS - MANTIDOS EXATAMENTE IGUAIS (exceto ajuste de padding) -->
+    <div class="slide slide-bg-light">
+        <div class="slide-content cover">
+        <div class="section-badge"><i class="fas fa-graduation-cap"></i> Seminário Acadêmico</div>
+        <h1>Antenas<br><span>Refletoras</span></h1>
+        <div class="institution">
+            <p><i class="fas fa-university"></i> Universidade Federal do Ceará - Campus de Quixadá</p>
+            <p><i class="fas fa-book"></i> Ondas e Antenas | Prof. Dr. Antonio Joel Ramiro de Castro</p>
+            <p><i class="fas fa-calendar-alt"></i> 2026.1</p>
+        </div>
+        <div class="team">
+            <div class="team-member"><i class="fas fa-user"></i> Ana Alicy Ribeiro</div>
+            <div class="team-member"><i class="fas fa-user"></i> Cícero Rodrigues</div>
+            <div class="team-member"><i class="fas fa-user"></i> Kaylane Castro</div>
+        </div>
+        </div>
+        <div class="slide-footer"><i class="fas fa-keyboard"></i> Dica: Pressione [P] para Modo Tela Cheia | Use os botões para navegar</div>
+    </div>
+
+    <div class="slide slide-bg-alt">
+        <div class="slide-content">
+        <div class="section-badge"><i class="fas fa-list-ol"></i> Estrutura do Estudo</div>
+        <h1 class="timeline-title-large" style="font-size: 2.5rem; text-align: center;">Modelos Analisados no <span style="color: var(--dourado);">Seminário</span></h1>
+        <div class="evolution-timeline">
+            <div class="timeline-steps-horizontal">
+            <div class="timeline-step-horizontal">
+                <div class="step-marker"><i class="fas fa-star"></i></div>
+                <div>
+                <div class="step-year-horizontal">Etapa 1</div>
+                <div class="step-title-horizontal">Introdução</div>
+                <div class="step-desc-horizontal">Fundamentos físicos e conceitos básicos de reflexão.</div>
+                </div>
+            </div>
+            <div class="timeline-step-horizontal">
+                <div class="step-marker"><i class="fas fa-border-style"></i></div>
+                <div>
+                <div class="step-year-horizontal">Etapa 2</div>
+                <div class="step-title-horizontal">Refletor Plano</div>
+                <div class="step-desc-horizontal">Análise com Teoria das Imagens e ganho.</div>
+                </div>
+            </div>
+            <div class="timeline-step-horizontal">
+                <div class="step-marker"><i class="fas fa-angle-right"></i></div>
+                <div>
+                <div class="step-year-horizontal">Etapa 3</div>
+                <div class="step-title-horizontal">Refletor de Canto</div>
+                <div class="step-desc-horizontal">Geometrias angulares e arranjos equivalentes.</div>
+                </div>
+            </div>
+            <div class="timeline-step-horizontal">
+                <div class="step-marker"><i class="fas fa-circle-notch"></i></div>
+                <div>
+                <div class="step-year-horizontal">Etapa 4</div>
+                <div class="step-title-horizontal">Refletor Parabólico</div>
+                <div class="step-desc-horizontal">Foco, superfícies de revolução e diretividade.</div>
+                </div>
+            </div>
+            <div class="timeline-step-horizontal">
+                <div class="step-marker"><i class="fas fa-globe"></i></div>
+                <div>
+                <div class="step-year-horizontal">Etapa 5</div>
+                <div class="step-title-horizontal">Refletor Esférico</div>
+                <div class="step-desc-horizontal">Aberrações esféricas e correções de fase.</div>
+                </div>
+            </div>
+            <div class="timeline-step-horizontal">
+                <div class="step-marker"><i class="fas fa-photo-video"></i></div>
+                <div>
+                <div class="step-year-horizontal">Etapa 6</div>
+                <div class="step-title-horizontal">Multimídia</div>
+                <div class="step-desc-horizontal">Simulações visuais e recursos computacionais.</div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+        <div class="slide-footer"><i class="fas fa-chevron-down"></i> Role para continuar</div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge">Fundamentos</div>
+        <div class="timeline-detail">
+            <div class="timeline-image" onclick="toggleImageExpand(this)">
+            <img src="imagens/Introdução.png" alt="Introdução às Antenas Refletoras">
+            <div class="expand-close-btn" onclick="event.stopPropagation(); closeImageExpand(this.parentElement)"><i class="fas fa-times"></i></div>
+            <div class="image-caption">Mecanismo de Reflexão</div>
+            </div>
+            <div class="timeline-info">
+            <div class="timeline-year-large">01</div>
+            <div class="timeline-title-large">Introdução às Antenas Refletoras</div>
+            <div class="timeline-desc-large">Estudo sobre a utilização de superfícies refletoras passivas para modificar o diagrama de radiação de antenas primárias, projetando estruturas de alto ganho espacial.</div>
+            <div class="timeline-details-grid">
+                <div class="timeline-detail-item"><i class="fas fa-compress-arrows-alt"></i><strong>Objetivo Principal</strong><span>Direcionar a energia irradiada para uma região angular estreita no espaço livre.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-bolt"></i><strong>Alimentador Primário</strong><span>Geralmente composto por dipolos, fendas ou cornetas localizadas estrategicamente.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-wave-square"></i><strong>Aproximação Óptica</strong><span>Utilização dos princípios da óptica geométrica para prever o comportamento das frentes de onda.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-ruler-combined"></i><strong>Dimensões Elétricas</strong><span>As superfícies devem ser eletricamente grandes se comparadas ao comprimento de onda ($\lambda$).</span></div>
+            </div>
+            <div class="how-it-works"><i class="fas fa-info-circle"></i><strong>Importância Prática</strong><span>Constrói a fundação conceitual para entender como superfícies passivas conseguem focar energia eletromagnética com precisão.</span></div>
+            </div>
+        </div>
+        </div>
+        <div class="slide-footer"><i class="fas fa-chevron-down"></i> Role para continuar</div>
+    </div>
+
+    <div class="slide slide-bg-alt">
+        <div class="slide-content">
+        <div class="section-badge"><i class="fas fa-question-circle"></i> Visão Geral</div>
+        <h1 class="timeline-title-large" style="font-size: 2.5rem; text-align: center; margin-bottom: 0.5rem;">Por que usar <span style="color: var(--dourado);">Antenas Refletoras</span>?</h1>
+        <p class="timeline-desc-large" style="max-width: 700px; margin: 0 auto 2rem auto; text-align: center;">Os refletores são as soluções mais eficientes na engenharia de telecomunicações para atingir alta diretividade e ganho extremo.</p>
+        <div class="why-evolve-grid">
+            <div class="why-card"><div class="why-icon"><i class="fas fa-bullseye"></i></div><h3>Diretividade Extrema</h3><p>Concentram a energia irradiada em feixes extremamente estreitos, ideais para longa distância.</p></div>
+            <div class="why-card"><div class="why-icon"><i class="fas fa-chart-line"></i></div><h3>Ganho Elevado</h3><p>A área física do refletor converte frentes de onda esféricas em planas de alta intensidade.</p></div>
+            <div class="why-card"><div class="why-icon"><i class="fas fa-satellite"></i></div><h3>Aplicações Espaciais</h3><p>Indispensáveis para radioastronomia, rastreamento de satélites e espaço profundo.</p></div>
+            <div class="why-card"><div class="why-icon"><i class="fas fa-compress-arrows-alt"></i></div><h3>Modificação de Feixe</h3><p>Permitem moldar geometricamente o diagrama para atender áreas de cobertura específicas.</p></div>
+            <div class="why-card"><div class="why-icon"><i class="fas fa-tachometer-alt"></i></div><h3>Simplicidade Mecânica</h3><p>Estruturas metálicas precisas alimentadas por fontes primárias simples (dipolos ou cornetas).</p></div>
+            <div class="why-card"><div class="why-icon"><i class="fas fa-broadcast-tower"></i></div><h3>Operação em Micro-ondas</h3><p>Desempenho ótimo em frequências elevadas onde o refletor se torna eletricamente grande.</p></div>
+        </div>
+        </div>
+        <div class="slide-footer"><i class="fas fa-chevron-down"></i> Role para continuar</div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge">Topologia 1</div>
+        <div class="timeline-detail">
+            <div class="timeline-image" onclick="toggleImageExpand(this)">
+            <img src="assets/imagens/plane.png" alt="Refletor Plano">
+            <div class="expand-close-btn" onclick="event.stopPropagation(); closeImageExpand(this.parentElement)"><i class="fas fa-times"></i></div>
+            <div class="image-caption">Teoria das Imagens em Refletores Planos</div>
+            </div>
+            <div class="timeline-info">
+            <div class="timeline-year-large">02</div>
+            <div class="timeline-title-large">Refletor Plano (Plane Reflector)</div>
+            <div class="timeline-desc-large">Comportamento de uma antena linear colocada paralelamente a um plano condutor perfeito. O sistema é modelado analiticamente através da aplicação da Teoria das Imagens.</div>
+            <div class="timeline-details-grid">
+                <div class="timeline-detail-item"><i class="fas fa-clone"></i><strong>Teoria das Imagens</strong><span>O plano condutor é substituído por uma imagem virtual com corrente defasada em 180°.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-arrows-alt-h"></i><strong>Distância do Elemento ($s$)</strong><span>O espaçamento entre o alimentador e o plano altera diretamente o ganho e a impedância.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-chart-area"></i><strong>Direcionalidade</strong><span>Evita a radiação para o espaço posterior, direcionando a energia para o semi-espaço frontal.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-calculator"></i><strong>Expressão Matemática</strong><span>O campo total é o produto do fator do elemento pelo fator do arranjo equivalente.</span></div>
+            </div>
+            <div class="how-it-works"><i class="fas fa-square"></i><strong>Equacionamento Prático</strong><span>Configura-se como o modelo analítico ideal para introduzir os conceitos de lóbulos secundários e casamentos de impedância.</span></div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge">Topologia 2</div>
+        <div class="timeline-detail">
+            <div class="timeline-image" onclick="toggleImageExpand(this)">
+            <img src="assets/imagens/corner.png" alt="Refletor de Canto">
+            <div class="expand-close-btn" onclick="event.stopPropagation(); closeImageExpand(this.parentElement)"><i class="fas fa-times"></i></div>
+            <div class="image-caption">Refletor de Canto de 90 Graus</div>
+            </div>
+            <div class="timeline-info">
+            <div class="timeline-year-large">03</div>
+            <div class="timeline-title-large">Refletor de Canto (Corner Reflector)</div>
+            <div class="timeline-desc-large">Aborda a junção de dois refletores planos formando um ângulo diedro. Essa geometria confina e direciona a radiação de forma consideravelmente superior ao plano simples.</div>
+            <div class="timeline-details-grid">
+                <div class="timeline-detail-item"><i class="fas fa-less-than"></i><strong>Ângulo de Abertura ($\alpha$)</strong><span>Ângulos comuns incluem $90^\circ$, $60^\circ$ e $45^\circ$, determinando o número de imagens virtuais.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-network-wired"></i><strong>Mapeamento de Imagens</strong><span>Para um canto de $90^\circ$, utilizam-se 3 antenas imagens para solucionar as condições de contorno.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-expand"></i><strong>Aumento de Ganho</strong><span>O estreitamento do feixe principal proporciona um ganho de diretividade substancial na bissetriz.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-mobile-alt"></i><strong>Aplicações Fixas</strong><span>Muito utilizado em recepção de sinais de TV UHF comercial e links ponto a ponto estáveis.</span></div>
+            </div>
+            <div class="how-it-works"><i class="fas fa-star"></i><strong>Geometria de Canto</strong><span>O ângulo diedro restringe o espalhamento lateral das ondas, forçando a superposição construtiva paralela ao vetor bissetriz.</span></div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge">Topologia 3</div>
+        <div class="timeline-detail">
+            <div class="timeline-image" onclick="toggleImageExpand(this)">
+            <img src="assets/imagens/parabolico.png" alt="Refletor Parabólico">
+            <div class="expand-close-btn" onclick="event.stopPropagation(); closeImageExpand(this.parentElement)"><i class="fas fa-times"></i></div>
+            <div class="image-caption">Superfície Parabólica de Revolução</div>
+            </div>
+            <div class="timeline-info">
+            <div class="timeline-year-large">04</div>
+            <div class="timeline-title-large">Refletor Parabólico (Parabolic Reflector)</div>
+            <div class="timeline-desc-large">Demonstração física de que se uma fonte pontual for posicionada no foco de uma parábola condutora, as ondas esféricas refletidas emergem como frentes de onda planas ideais.</div>
+            <div class="timeline-details-grid">
+                <div class="timeline-detail-item"><i class="fas fa-crosshairs"></i><strong>Propriedade de Foco</strong><span>Todos os raios originados no foco percorrem caminhos ópticos idênticos até a abertura.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-percentage"></i><strong>Eficiência de Abertura</strong><span>Leva em consideração a iluminação uniforme da superfície e as perdas associadas por transbordamento (*spillover*).</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-shapes"></i><strong>Alimentadores Comuns</strong><span>Cornetas corrugadas e arranjos dipolo-disco posicionados diretamente no centro focal.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-chart-line"></i><strong>Padrões de Radiação</strong><span>Análise detalhada do lóbulo principal e o controle de lóbulos laterais via conicidade.</span></div>
+            </div>
+            <div class="how-it-works"><i class="fas fa-star"></i><strong>Mecanismo de Transformation</strong><span>Transforma geometricamente frentes de onda esféricas divergentes em frentes de onda colimadas altamente direcionais.</span></div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge">Topologia 4</div>
+        <div class="timeline-detail">
+            <div class="timeline-image" onclick="toggleImageExpand(this)">
+            <img src="assets/imagens/esferico.png" alt="Refletor Esférico">
+            <div class="expand-close-btn" onclick="event.stopPropagation(); closeImageExpand(this.parentElement)"><i class="fas fa-times"></i></div>
+            <div class="image-caption">Aberração Esférica e Correção</div>
+            </div>
+            <div class="timeline-info">
+            <div class="timeline-year-large">05</div>
+            <div class="timeline-title-large">Refletor Esférico (Spherical Reflector)</div>
+            <div class="timeline-desc-large">Funcionamento de refletores baseados em calotas esféricas. Ao contrário das parábolas, superfícies esféricas geram erros de fase devido à aberração inerente à geometria.</div>
+            <div class="timeline-details-grid">
+                <div class="timeline-detail-item"><i class="fas fa-exclamation-triangle"></i><strong>Aberração Esférica</strong><span>Raios paralelos incidentes não convergem para um único ponto fixo de interseção.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-sync"></i><strong>Simetria Volumétrica</strong><span>A vantagem é a simetria perfeita: o feixe pode ser apontado movendo apenas o alimentador.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-wrench"></i><strong>Técnicas de Correção</strong><span>Uso de sub-refletores complexos ou linhas de alimentação lineares com distribuições de fase específicas.</span></div>
+                <div class="timeline-detail-item"><i class="fas fa-monument"></i><strong>Aplicações de Grande Porte</strong><span>Geometria de base para grandes radiotelescópios estáticos devido à facilidade de varredura angular.</span></div>
+            </div>
+            <div class="how-it-works"><i class="fas fa-history"></i><strong>Vantagem Operacional</strong><span>Permite rotacionar o feixe eletromagnético no espaço sem a necessidade de movimentar mecanicamente o refletor principal gigante.</span></div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- NOVO SLIDE: Equações Fundamentais com Diagrama, Gráfico, Tabela e Significado Físico -->
+    <div class="slide slide-bg-alt">
+        <div class="slide-content">
+            <div class="section-badge"><i class="fas fa-square-root-alt"></i> Formulação Matemática Avançada</div>
+            <h2 class="timeline-title-large" style="text-align: center; margin-bottom: 0.5rem;">Antenas Refletoras – <span style="color: var(--dourado);">Equações‑chave</span></h2>
+            <p style="text-align: center; margin-bottom: 1.5rem; max-width: 800px; margin-left: auto; margin-right: auto;">As expressões abaixo, extraídas do Capítulo 15 de Balanis (3ª ed.), resumem a geometria, o arranjo e a corrente induzida nos principais tipos de refletores.<br><strong>⚡ Clique em qualquer equação para expandir com diagrama, gráfico e tabela de variáveis.</strong></p>
+
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem;">
+                <!-- CARD 1: Refletor Plano -->
+                <div style="background: var(--painel); border-radius: 32px; padding: 2rem; display: flex; flex-direction: column; height: 100%;">
+                    <h3 style="color: var(--dourado); font-size: 1.4rem; margin-bottom: 0.8rem;"><i class="fas fa-border-all"></i> Refletor Plano</h3>
+                    <p style="font-size: 1rem; line-height: 1.7;">Analisado pela <strong>Teoria das Imagens</strong> (Seção 4.7). O plano condutor é substituído por uma fonte virtual:</p>
+                    <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 1rem; line-height: 1.7;">
+                        <li>Dipolo vertical → imagem com mesma polaridade (+1)</li>
+                        <li>Dipolo horizontal → imagem com polaridade oposta (–1)</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem; font-style: italic; font-size: 1rem;">Campo total = campo direto + campo da imagem.</p>
+                    <div class="image-caption" style="margin-top: auto; padding-top: 0.5rem; border-top: 1px solid rgba(228,184,106,0.2); font-size: 0.85rem;">📘 Referência: Seção 15.2</div>
+                </div>
+
+                <!-- CARD 2: Refletor de Canto (com equação clicável) -->
+                <div style="background: var(--painel); border-radius: 32px; padding: 2rem; display: flex; flex-direction: column; height: 100%;">
+                    <h3 style="color: var(--dourado); font-size: 1.4rem; margin-bottom: 0.8rem;"><i class="fas fa-angle-double-right"></i> Refletor de Canto (90°)</h3>
+                    <p style="font-size: 1rem; line-height: 1.7;">Fator de arranjo que soma as contribuições das imagens múltiplas:</p>
+                    <div class="eq-display">
+                        <span class="eq-clickable" onclick="showCornerEquation()" style="font-size: 1.1rem;">\(AF = 2\bigl[\cos(ks\sin\theta\cos\phi) - \cos(ks\sin\theta\sin\phi)\bigr]\)</span>
+                    </div>
+                    <p style="font-size: 0.9rem; line-height: 1.6;">\(X = ks\sin\theta\cos\phi\), \(Y = ks\sin\theta\sin\phi\), \(s\) = distância do vértice.</p>
+                    <p style="margin-top: 0.3rem; font-size: 0.9rem;">📘 Para ângulos de 60°, 45° e 30°, ver Eqs. 15‑7 a 15‑9.</p>
+                </div>
+
+                <!-- CARD 3: Refletor Parabólico (com três equações clicáveis) -->
+                <div style="background: var(--painel); border-radius: 32px; padding: 2rem; display: flex; flex-direction: column; height: 100%;">
+                    <h3 style="color: var(--dourado); font-size: 1.4rem; margin-bottom: 0.8rem;"><i class="fas fa-chart-line"></i> Refletor Parabólico</h3>
+                    <p style="font-size: 1rem; line-height: 1.7;"><strong>Geometria:</strong></p>
+                    <div class="eq-display">
+                        <span class="eq-clickable" onclick="showParabolicEquation1()">\(r' = \frac{2f}{1+\cos\theta'}\)</span>
+                    </div>
+                    <p style="font-size: 1rem; line-height: 1.7;"><strong>Relação f/d:</strong></p>
+                    <div class="eq-display">
+                        <span class="eq-clickable" onclick="showParabolicEquation2()">\(\frac{f}{d} = \frac{1}{4}\cot(\theta_0/2)\)</span>
+                    </div>
+                    <p style="font-size: 1rem; line-height: 1.7;"><strong>Corrente induzida (Óptica Física):</strong></p>
+                    <div class="eq-display">
+                        <span class="eq-clickable" onclick="showParabolicEquation3()">\(J_s = 2\,\hat{n} \times H_i\)</span>
+                    </div>
+                    <div class="image-caption" style="margin-top: auto; padding-top: 0.5rem; border-top: 1px solid rgba(228,184,106,0.2); font-size: 0.85rem;">📘 Seção 15.4.1 – Clique em qualquer equação</div>
+                </div>
+
+                <!-- CARD 4: Refletor Esférico -->
+                <div style="background: var(--painel); border-radius: 32px; padding: 2rem; display: flex; flex-direction: column; height: 100%;">
+                    <h3 style="color: var(--dourado); font-size: 1.4rem; margin-bottom: 0.8rem;"><i class="fas fa-globe"></i> Refletor Esférico</h3>
+                    <p style="font-size: 1rem; line-height: 1.7;">Devido à <strong>aberração esférica</strong>, não há uma equação fechada única. A análise requer:</p>
+                    <ul style="margin: 0.5rem 0 0 1.2rem; font-size: 1rem; line-height: 1.7;">
+                        <li>Funções de Bessel esféricas</li>
+                        <li>Polinômios de Legendre</li>
+                        <li>Técnicas de correção de fase (alimentadores lineares ou sub‑refletores)</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem; font-style: italic; font-size: 1rem;">Vantagem: varredura do feixe movendo apenas o alimentador.</p>
+                    <div class="image-caption" style="margin-top: auto; padding-top: 0.5rem; border-top: 1px solid rgba(228,184,106,0.2); font-size: 0.85rem;">📘 Seção 15.5 – Exemplo do radiotelescópio de Arecibo</div>
+                </div>
+            </div>
+
+            <!-- CARD BÔNUS: Resumo prático -->
+            <div style="margin-top: 2rem; background: var(--painel-forte); border-radius: 32px; padding: 1.2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <i class="fas fa-chart-simple" style="font-size: 2rem; color: var(--dourado);"></i>
+                    <div>
+                        <strong style="color: var(--dourado);">Eficiência de abertura máxima (∼82%)</strong><br>
+                        <span style="font-size: 0.85rem;">Ocorre quando a iluminação na borda do refletor está entre <strong>-8 dB e -11 dB</strong> (Fig. 15.20).</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <i class="fas fa-satellite-dish" style="font-size: 2rem; color: var(--dourado);"></i>
+                    <div>
+                        <strong style="color: var(--dourado);">Sistema Cassegrain</strong><br>
+                        <span style="font-size: 0.85rem;">Paraboloide + hiperboloide → alimentador atrás do refletor.<br>Parábola equivalente facilita os cálculos.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge"><i class="fas fa-flask"></i> Laboratório Digital</div>
+        <h2 class="timeline-title-large" style="text-align: center; margin-bottom: 1rem;">Demonstração Interativa: <span style="color: var(--dourado);">SmartReflect Lab</span></h2>
+        <div class="lab-frame-container">
+            <iframe src="http://localhost:8501/?embed=true" class="lab-frame"></iframe>
+        </div>
+        </div>
+        <div class="slide-footer"><i class="fas fa-chevron-down"></i> Avance para o resumo de fechamento</div>
+    </div>
+
+    <div class="slide slide-bg-light">
+        <div class="slide-content">
+        <div class="section-badge">Fechamento</div>
+        <h2 class="timeline-title-large" style="text-align: center; margin-bottom: 1.5rem;">Resumo Geral do Conteúdo</h2>
+        <div class="timeline-details-grid" style="grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+            <div class="timeline-detail-item">
+            <strong>Refletor Plano e Teoria das Imagens</strong>
+            <span style="display:block; margin-top: 0.4rem; color: var(--suave); line-height: 1.5;">
+                Análise inicial de superfícies condutoras. A aplicação do teorema das imagens substitui o plano condutor por um elemento virtual simétrico e defasado, permitindo calcular o estreitamento do feixe frontal e o casamento de impedância através da variação da distância do alimentador primário.
+            </span>
+            </div>
+            <div class="timeline-detail-item">
+            <strong>Refletores de Canto Diedro</strong>
+            <span style="display:block; margin-top: 0.4rem; color: var(--suave); line-height: 1.5;">
+                Evolução estrutural baseada na junção angular de duas placas planas (geralmente a 90°, 60° ou 45°). A geometria confina as ondas de forma tridimensional, forçando uma superposição construtiva na direção da bissetriz, o que eleva drasticamente a diretividade em links ponto a ponto.
+            </span>
+            </div>
+            <div class="timeline-detail-item">
+            <strong>Refletor Parabólico de Revolução</strong>
+            <span style="display:block; margin-top: 0.4rem; color: var(--suave); line-height: 1.5;">
+                A solução de maior ganho para micro-ondas. Devido às propriedades geométricas da parábola, ondas esféricas divergentes originadas exatamente em seu foco percorrem caminhos idênticos e emergem na abertura como ondas planas perfeitas, gerando feixes altamente colimados.
+            </span>
+            </div>
+            <div class="timeline-detail-item">
+            <strong>Refletor Esférico e Processamento</strong>
+            <span style="display:block; margin-top: 0.4rem; color: var(--suave); line-height: 1.5;">
+                Sistemas baseados em calotas esféricas que introduzem erros de fase (aberração esférica), exigindo sub-refletores ou matrizes inteligentes de alimentação (Multi-feed). Sua principal vantagem é a simetria esférica, permitindo varrer o feixe no espaço movendo apenas o alimentador.
+            </span>
+            </div>
+        </div>
+        <div style="margin-top: 2rem; background: var(--painel-forte); padding: 1.2rem; border-radius: var(--raio); border-left: 4px solid var(--dourado); max-width: 850px; margin: 2rem auto 0;">
+            <p style="color: var(--texto); font-weight: 600; text-align: center; margin-bottom: 0.3rem;">Conclusão do Seminário</p>
+            <p style="color: var(--suave); font-style: italic; text-align: center; font-size: 0.9rem;">
+            "A transição dos modelos estáticos planos para sistemas focais reconfiguráveis consolida a importância da geometria no controle e otimização das comunicações modernas de alto ganho."
+            </p>
+        </div>
+        </div>
+        <div class="slide-footer">Fim da apresentação | Muito obrigado pela atenção!</div>
+    </div>
+</div>
+
+<div class="nav-controls">
+    <button class="nav-btn" id="prevSlide" onclick="changeSlide(-1)"><i class="fas fa-chevron-up"></i></button>
+    <button class="nav-btn" id="nextSlide" onclick="changeSlide(1)"><i class="fas fa-chevron-down"></i></button>
+</div>
+
+<div class="slide-indicator" id="slideIndicator">Slide 1 / 10</div>
+
+<script>
+    // ========== FUNÇÕES DE NAVEGAÇÃO (ORIGINAIS) ==========
+    const container = document.getElementById('slidesContainer');
+    const slides = document.querySelectorAll('.slide');
+    const indicator = document.getElementById('slideIndicator');
+    let currentIndex = 0;
+    
+    function updateIndicator() {
+        indicator.textContent = `Slide ${currentIndex + 1} / ${slides.length}`;
+    }
+    
+    function changeSlide(direction) {
+        const newIndex = currentIndex + direction;
+        if (newIndex >= 0 && newIndex < slides.length) {
+        currentIndex = newIndex;
+        slides[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updateIndicator();
+        }
+    }
+    
+    let scrollTimeout;
+    container.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+        const scrollPosition = container.scrollTop;
+        const slideHeight = window.innerHeight;
+        const newIndex = Math.round(scrollPosition / slideHeight);
+        if (newIndex !== currentIndex && newIndex >= 0 && newIndex < slides.length) {
+            currentIndex = newIndex;
+            updateIndicator();
+        }
+        }, 100);
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        if (document.activeElement.tagName === 'IFRAME') return;
+        if (e.key === 'p' || e.key === 'P') {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Erro ao tentar ativar tela cheia: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+            return;
+        }
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') changeSlide(1);
+        else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') changeSlide(-1);
+        else if (e.key === 'Home') { slides[0].scrollIntoView({ behavior: 'smooth' }); currentIndex = 0; updateIndicator(); }
+        else if (e.key === 'End') { slides[slides.length-1].scrollIntoView({ behavior: 'smooth' }); currentIndex = slides.length-1; updateIndicator(); }
+    });
+    
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    container.addEventListener('touchstart', (e) => {
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+        touchEndY = e.changedTouches[0].screenY;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const deltaY = touchStartY - touchEndY;
+        if (deltaY > swipeThreshold) changeSlide(1);
+        else if (deltaY < -swipeThreshold) changeSlide(-1);
+    }
+    
+    function toggleImageExpand(imageContainer) {
+        if (imageContainer.classList.contains('expanded')) {
+            imageContainer.classList.remove('expanded');
+        } else {
+            const currentSlide = imageContainer.closest('.slide');
+            const otherExpanded = currentSlide.querySelectorAll('.timeline-image.expanded');
+            otherExpanded.forEach(expanded => expanded.classList.remove('expanded'));
+            imageContainer.classList.add('expanded');
+            setTimeout(() => imageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+        }
+    }
+    
+    function closeImageExpand(imageContainer) {
+        imageContainer.classList.remove('expanded');
+    }
+    
+    // ========== FUNÇÃO PRINCIPAL DO MODAL ==========
+    function showEquation(equation, legendHtml, diagramHtml, graphHtml) {
+        const modal = document.getElementById('eqModal');
+        const eqDiv = document.getElementById('modalEquation');
+        const legendDiv = document.getElementById('modalLegend');
+        const diagramDiv = document.getElementById('modalDiagram');
+        const graphDiv = document.getElementById('modalGraph');
+        
+        eqDiv.innerHTML = equation;
+        legendDiv.innerHTML = legendHtml;
+        diagramDiv.innerHTML = diagramHtml;
+        graphDiv.innerHTML = graphHtml;
+        modal.style.display = 'flex';
+        
+        if (window.MathJax) {
+            MathJax.typesetPromise([eqDiv, legendDiv]).catch(err => console.log(err));
+        }
+    }
+
+    function closeEqModal(event) {
+        const modal = document.getElementById('eqModal');
+        if (event && event.target !== modal && 
+            event.target !== document.querySelector('.eq-modal-close')) {
+            return;
+        }
+        modal.style.display = 'none';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('eqModal');
+            if (modal && modal.style.display === 'flex') {
+                closeEqModal();
+            }
+        }
+    });
+
+    // ===== Diagramas SVG =====
+    const coordDiagramSVG = `<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="150" x2="180" y2="150" stroke="#e4b86a" stroke-width="1.5"/>
+        <line x1="100" y1="20" x2="100" y2="160" stroke="#e4b86a" stroke-width="1.5"/>
+        <line x1="20" y1="150" x2="100" y2="20" stroke="#e4b86a" stroke-width="1.5" stroke-dasharray="4"/>
+        <circle cx="100" cy="150" r="3" fill="#e4b86a"/>
+        <text x="105" y="155" fill="#e4b86a" font-size="10">O</text>
+        <text x="175" y="155" fill="#d5bfd0" font-size="9">x</text>
+        <text x="105" y="18" fill="#d5bfd0" font-size="9">y</text>
+        <text x="15" y="145" fill="#d5bfd0" font-size="9">z</text>
+        <path d="M 100 150 A 60 60 0 0 1 145 95" stroke="#e4b86a" stroke-width="1" fill="none"/>
+        <text x="140" y="100" fill="#e4b86a" font-size="9">θ</text>
+        <path d="M 110 150 A 20 20 0 0 1 135 135" stroke="#e4b86a" stroke-width="1" fill="none"/>
+        <text x="130" y="133" fill="#e4b86a" font-size="9">φ</text>
+    </svg>`;
+    
+    const radiationPatternSVG = `<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="90" cy="90" r="80" fill="none" stroke="#e4b86a" stroke-width="0.5" stroke-dasharray="2"/>
+        <circle cx="90" cy="90" r="60" fill="none" stroke="#e4b86a" stroke-width="0.5"/>
+        <circle cx="90" cy="90" r="40" fill="none" stroke="#e4b86a" stroke-width="0.5"/>
+        <circle cx="90" cy="90" r="20" fill="none" stroke="#e4b86a" stroke-width="0.5"/>
+        <line x1="90" y1="10" x2="90" y2="170" stroke="#e4b86a" stroke-width="0.5"/>
+        <line x1="10" y1="90" x2="170" y2="90" stroke="#e4b86a" stroke-width="0.5"/>
+        <path d="M 90 90 L 160 50 A 80 80 0 0 1 160 130 Z" fill="rgba(228,184,106,0.2)" stroke="#e4b86a" stroke-width="1.5"/>
+        <text x="150" y="45" fill="#d5bfd0" font-size="8">lóbulo</text>
+        <text x="150" y="55" fill="#d5bfd0" font-size="8">principal</text>
+    </svg>`;
+
+    // 1. Refletor de Canto
+    function showCornerEquation() {
+        const eq = "\\[ AF = 2\\bigl[\\cos(ks\\sin\\theta\\cos\\phi) - \\cos(ks\\sin\\theta\\sin\\phi)\\bigr] \\]";
+        const legend = `
+            <table>
+                <tr><th>Símbolo</th><th>Nome</th><th>Unidade</th><th>Exemplo</th></tr>
+                <tr><td>\\(k\\)</td><td>Número de onda</td><td>\\(\\text{rad}/\\text{m}\\)</td><td>\\(2\\pi/\\lambda\\)</td></tr>
+                <tr><td>\\(s\\)</td><td>Distância do vértice ao alimentador</td><td>\\(\\lambda\\)</td><td>\\(0,25\\lambda\\)</td></tr>
+                <tr><td>\\(\\theta, \\phi\\)</td><td>Ângulos esféricos de observação</td><td>graus / rad</td><td>\\(0^\\circ \\text{ a } 180^\\circ\\)</td></tr>
+            </table>
+            <p style="margin-top:0.5rem;"><strong> Significado físico:</strong><br>O fator de arranjo representa a soma coerente das ondas direta e refletidas pelas imagens. O ângulo diedro de 90° produz 3 imagens, resultando em um feixe direcional na bissetriz do canto.</p>
+        `;
+        const diagram = `<div class="caption"> Sistema de coordenadas esféricas</div>${coordDiagramSVG}<div class="caption">θ (elevação) e φ (azimute) definem a direção de observação</div>`;
+        const graph = `<div class="caption"> Diagrama de radiação típico (plano H)</div>${radiationPatternSVG}<div class="caption">Feixe direcional com supressão lateral</div>`;
+        showEquation(eq, legend, diagram, graph);
+    }
+
+    // 2. Parabólica - Geometria
+    function showParabolicEquation1() {
+        const eq = "\\[ r' = \\frac{2f}{1+\\cos\\theta'} \\]";
+        const legend = `
+            <table>
+                <tr><th>Símbolo</th><th>Nome</th><th>Unidade</th><th>Exemplo</th></tr>
+                <tr><td>\\(r'\\)</td><td>Distância do foco ao ponto da superfície</td><td>m</td><td>variável</td></tr>
+                <tr><td>\\(f\\)</td><td>Distância focal</td><td>m</td><td>\\(0,5d\\)</td></tr>
+                <tr><td>\\(\\theta'\\)</td><td>Ângulo polar (0° no eixo)</td><td>graus</td><td>\\(0^\\circ \\text{ a } 90^\\circ\\)</td></tr>
+            </table>
+            <p style="margin-top:0.5rem;"><strong> Significado físico:</strong><br>Equação da parábola em coordenadas esféricas. Garante que todos os raios oriundos do foco percorrem caminhos ópticos iguais até o plano de abertura, gerando frente de onda plana após reflexão.</p>
+        `;
+        const diagram = `<div class="caption"> Geometria do refletor parabólico</div>${coordDiagramSVG}<div class="caption">θ' medido a partir do eixo de simetria</div>`;
+        const graph = `<div class="caption"> Colimação da onda esférica</div><svg width="180" height="100" viewBox="0 0 180 100" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="50" r="4" fill="#e4b86a"/><text x="25" y="45" fill="#d5bfd0" font-size="8">Foco</text><path d="M 45 50 Q 80 30 110 50 Q 140 70 170 50" stroke="#e4b86a" stroke-width="1" fill="none"/><line x1="110" y1="15" x2="110" y2="85" stroke="#e4b86a" stroke-width="0.8" stroke-dasharray="3"/></svg><div class="caption">Frente de onda plana após reflexão</div>`;
+        showEquation(eq, legend, diagram, graph);
+    }
+
+    // 3. Parabólica - relação f/d
+    function showParabolicEquation2() {
+        const eq = "\\[ \\frac{f}{d} = \\frac{1}{4}\\cot(\\theta_0/2) \\]";
+        const legend = `
+            <table>
+                <tr><th>Símbolo</th><th>Nome</th><th>Unidade</th><th>Exemplo</th></tr>
+                <tr><td>\\(f/d\\)</td><td>Relação focal</td><td>adimensional</td><td>\\(0,5\\)</td></tr>
+                <tr><td>\\(d\\)</td><td>Diâmetro da abertura</td><td>m</td><td>\\(10\\lambda\\)</td></tr>
+                <tr><td>\\(\\theta_0\\)</td><td>Ângulo subtendido</td><td>graus</td><td>\\(53,13^\\circ\\)</td></tr>
+            </table>
+            <p style="margin-top:0.5rem;"><strong> Significado físico:</strong><br>Controla a profundidade do refletor. Valores pequenos de f/d (refletor profundo) geram maior ângulo de iluminação, mas também maior spillover.</p>
+        `;
+        const diagram = `<div class="caption"> Relação geométrica f/d</div>${coordDiagramSVG}<div class="caption">θ₀ é o ângulo do foco à borda do refletor</div>`;
+        const graph = `<div class="caption"> Eficiência × θ₀</div><svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg"><path d="M 20 100 L 160 100" stroke="#e4b86a" stroke-width="1"/><path d="M 20 20 L 20 100" stroke="#e4b86a" stroke-width="1"/><path d="M 20 95 Q 50 60 80 40 Q 110 25 130 40 Q 150 60 160 80" stroke="#e4b86a" stroke-width="1.5" fill="none"/><text x="70" y="25" fill="#d5bfd0" font-size="7">~82%</text><text x="150" y="105" fill="#d5bfd0" font-size="7">θ₀</text></svg><div class="caption">Máximo de eficiência em θ₀ ≈ 53° (f/d=0,5)</div>`;
+        showEquation(eq, legend, diagram, graph);
+    }
+
+    // 4. Parabólica - corrente induzida
+    function showParabolicEquation3() {
+        const eq = "\\[ J_s = 2\\,\\hat{n} \\times H_i \\]";
+        const legend = `
+            <table>
+                <tr><th>Símbolo</th><th>Nome</th><th>Unidade</th><th>Exemplo</th></tr>
+                <tr><td>\\(J_s\\)</td><td>Densidade de corrente superficial</td><td>\\(\\text{A}/\\text{m}\\)</td><td>variável</td></tr>
+                <tr><td>\\(\\hat{n}\\)</td><td>Vetor unitário normal à superfície</td><td>adimensional</td><td>direção radial</td></tr>
+                <tr><td>\\(H_i\\)</td><td>Campo magnético incidente</td><td>\\(\\text{A}/\\text{m}\\)</td><td>gerado pelo alimentador</td></tr>
+            </table>
+            <p style="margin-top:0.5rem;"><strong> Significado físico:</strong><br>Aproximação da Óptica Física: válida quando o raio de curvatura do refletor e as dimensões são ≫ λ. Cada ponto da superfície é tratado como plano condutor infinito.</p>
+        `;
+        const diagram = `<div class="caption">⚡ Vetor normal e campo incidente</div><svg width="180" height="120" viewBox="0 0 180 120" xmlns="http://www.w3.org/2000/svg"><path d="M 20 100 Q 90 30 160 100" stroke="#e4b86a" stroke-width="1.5" fill="none"/><line x1="90" y1="60" x2="130" y2="20" stroke="#ff9999" stroke-width="1.5"/><text x="135" y="18" fill="#ff9999" font-size="8">n̂</text><line x1="40" y1="110" x2="80" y2="70" stroke="#99ff99" stroke-width="1.5" stroke-dasharray="3"/><text x="30" y="115" fill="#99ff99" font-size="8">H_i</text></svg><div class="caption">A corrente induzida é perpendicular a n̂ e H_i</div>`;
+        const graph = `<div class="caption"> Diagrama de radiação típico</div>${radiationPatternSVG}<div class="caption">Feixe colimado de alta diretividade</div>`;
+        showEquation(eq, legend, diagram, graph);
+    }
+
+    updateIndicator();
+</script>
+
+</body>
+</html>
