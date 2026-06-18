@@ -3,16 +3,16 @@ import numpy as np
 from motor_fisico import MotorRefletor
 import matplotlib.pyplot as plt
 
-# Configurando o Matplotlib para casar com a sua paleta de cores
+
 plt.rcParams.update({
-    'figure.facecolor': '#12060f',     # --fundo
-    'axes.facecolor': '#21091d',       # --fundo-2
-    'text.color': '#fff4df',           # --texto
-    'axes.labelcolor': '#fff4df',      # --texto
-    'xtick.color': '#d5bfd0',          # --suave
-    'ytick.color': '#d5bfd0',          # --suave
-    'grid.color': '#6d173a',           # --vinho (substituindo o rgba por uma cor da sua paleta)
-    'grid.alpha': 0.3                  # Controle de opacidade nativo do Matplotlib
+    'figure.facecolor': '#F5F0FF',  # --fundo (cinza claro de fora dos gráficos)
+    'axes.facecolor': '#FFFFFF',    # --fundo-2 (branco de dentro dos gráficos)
+    'text.color': '#2C3E50',        # --texto (azul-petróleo para títulos e textos)
+    'axes.labelcolor': '#2C3E50',   # --texto (azul-petróleo para os rótulos dos eixos)
+    'xtick.color': '#5A2A90',       # --suave (roxo para os números do eixo X)
+    'ytick.color': '#5A2A90',       # --suave (roxo para os números do eixo Y)
+    'grid.color': '#8c5bd6',        # --vinho-claro (roxo claro para as linhas de grade)
+    'grid.alpha': 0.15              # Opacidade leve para a grade não atrapalhar
 })
 
 # Configuração da página para modo Wide (estilo dashboard)
@@ -66,6 +66,7 @@ with aba1:
         
         # Subplot 1: Geometria
         ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+        
         ax1.plot_surface(dados["X"], dados["Y"], dados["Z"], cmap='viridis', alpha=0.6)
         ax1.scatter([delta_x], [0], [dados["f"]], color='red', s=100, label='Alimentador')
         ax1.set_title("Posicionamento Físico do Alimentador")
@@ -127,7 +128,7 @@ with aba2:
 # CONTEÚDO DA ABA 3: SIMULADOR LEO
 # ========================================================
 with aba3:
-    st.subheader("🌌 Cenário Dinâmico: Rastreamento de Satélites de Órbita Baixa (LEO)")
+    st.subheader("Cenário Dinâmico: Rastreamento de Satélites de Órbita Baixa (LEO)")
     st.write("Avance o tempo da simulação para assistir ao satélite cruzando o céu e veja a antena refletora ajustando eletronicamente o seu canal focal.")
 
     # CORREÇÃO DE ESCOPO: Calculamos tudo ANTES de dividir as colunas visuais

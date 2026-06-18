@@ -1,6 +1,15 @@
 [theme]
-primaryColor = "#e4b86a"          # --dourado (usado nos sliders e destaques)
-backgroundColor = "#12060f"       # --fundo (cor de fundo principal)
-secondaryBackgroundColor = "#21091d" # --fundo-2 (cor do menu lateral e caixas)
-textColor = "#fff4df"             # --texto (cor da fonte para leitura limpa)
-font = "serif"                    # Combina com a sua escolha de Georgia/Times
+# Cor dos detalhes ativos, botões, sliders e links (--dourado)
+primaryColor = "#704cf2"
+
+# Cor de fundo principal (--fundo: cinza claro)
+backgroundColor = "#F5F0FF"
+
+# Cor dos painéis e caixas de texto lateral (--fundo-2: branco)
+secondaryBackgroundColor = "#FFFFFF"
+
+# Cor do texto principal (--texto: azul-petróleo)
+textColor = "#5b0e93"
+
+# Fonte padrão do sistema
+font = "sans serif"
